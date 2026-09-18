@@ -67,7 +67,7 @@ export default function Waypoint() {
 
   if (!waypoint) return null;
   const [x, y, z] = waypoint.position;
-  const color = waypoint.kind === "folder" ? "#ffc861" : "#35f2ff";
+  const color = waypoint.kind === "folder" ? "#ffc861" : "#7ec8e8";
   return (
     <group>
       <group position={[x, 0, z]}>

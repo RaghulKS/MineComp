@@ -5,14 +5,14 @@ import type { FileVisual, PlacedFile } from "../types";
 import { rand01 } from "../worldgen";
 
 export const VISUAL_COLOR: Record<FileVisual, string> = {
-  "book-red": "#ff6b5a",
+  "book-red": "#e85a4a",
   "book-parchment": "#ffd98a",
-  artwork: "#ffc861",
-  screen: "#35f2ff",
-  record: "#ff4fd8",
-  crate: "#ffa552",
-  terminal: "#5dff9a",
-  cube: "#a259ff",
+  artwork: "#e8b84a",
+  screen: "#4fc3e8",
+  record: "#e86a8a",
+  crate: "#e89a52",
+  terminal: "#6fd88a",
+  cube: "#9a7fd0",
 };
 
 function artTexture(seed: string): THREE.CanvasTexture {
@@ -136,7 +136,7 @@ function Visual({ visual, seed, id }: { visual: FileVisual; seed: number; id: st
           </mesh>
           <mesh position={[0, 0, 0.07]}>
             <planeGeometry args={[1.34, 0.76]} />
-            <meshStandardMaterial ref={glowMat} color="#35f2ff" emissive="#35f2ff" emissiveIntensity={1.8} toneMapped={false} />
+            <meshStandardMaterial ref={glowMat} color="#4fc3e8" emissive="#4fc3e8" emissiveIntensity={1.4} toneMapped={false} />
           </mesh>
           <mesh position={[0, -0.12, 0.08]}>
             <ringGeometry args={[0.12, 0.2, 3]} />
@@ -157,23 +157,23 @@ function Visual({ visual, seed, id }: { visual: FileVisual; seed: number; id: st
         <group>
           <mesh castShadow position={[0, -0.45, 0]}>
             <boxGeometry args={[1.1, 0.7, 0.9]} />
-            <meshStandardMaterial color="#3a1a3a" roughness={0.5} metalness={0.3} />
+            <meshStandardMaterial color="#5a3a4a" roughness={0.6} metalness={0.2} />
           </mesh>
           <mesh position={[0, -0.45, 0.46]}>
             <planeGeometry args={[0.9, 0.35]} />
-            <meshStandardMaterial ref={glowMat} color="#ff4fd8" emissive="#ff4fd8" emissiveIntensity={1.6} toneMapped={false} />
+            <meshStandardMaterial ref={glowMat} color="#e86a8a" emissive="#e86a8a" emissiveIntensity={1.2} toneMapped={false} />
           </mesh>
           <mesh ref={spin} position={[0, 0.05, 0]} rotation={[0, 0, 0]}>
             <cylinderGeometry args={[0.55, 0.55, 0.05, 32]} />
-            <meshStandardMaterial color="#0b0b12" roughness={0.3} metalness={0.4} />
+            <meshStandardMaterial color="#1a1a1a" roughness={0.3} metalness={0.4} />
           </mesh>
           <mesh position={[0, 0.09, 0]}>
             <cylinderGeometry args={[0.18, 0.18, 0.02, 24]} />
-            <meshStandardMaterial color="#ff4fd8" emissive="#ff4fd8" emissiveIntensity={2} toneMapped={false} />
+            <meshStandardMaterial color="#e86a8a" emissive="#e86a8a" emissiveIntensity={1.5} toneMapped={false} />
           </mesh>
           <mesh position={[0, 0.25, 0]}>
             <cylinderGeometry args={[0.55, 0.55, 0.02, 32]} />
-            <meshBasicMaterial color="#ff4fd8" transparent opacity={0.15} />
+            <meshBasicMaterial color="#e86a8a" transparent opacity={0.15} />
           </mesh>
         </group>
       );
@@ -220,7 +220,7 @@ function Visual({ visual, seed, id }: { visual: FileVisual; seed: number; id: st
           </mesh>
           <mesh position={[0, 0.15, 0.28]}>
             <planeGeometry args={[0.82, 0.7]} />
-            <meshStandardMaterial ref={glowMat} color="#5dff9a" emissive="#5dff9a" emissiveIntensity={1.6} toneMapped={false} />
+            <meshStandardMaterial ref={glowMat} color="#6fd88a" emissive="#6fd88a" emissiveIntensity={1.3} toneMapped={false} />
           </mesh>
           {[0.32, 0.2, 0.08, -0.04].map((y, i) => (
             <mesh key={y} position={[-0.32 + i * 0.05, y, 0.29]}>
@@ -234,13 +234,13 @@ function Visual({ visual, seed, id }: { visual: FileVisual; seed: number; id: st
           </mesh>
           <mesh position={[0, -0.46, 0.45]} rotation={[-0.3, 0, 0]}>
             <boxGeometry args={[0.7, 0.02, 0.2]} />
-            <meshStandardMaterial color="#5dff9a" emissive="#5dff9a" emissiveIntensity={0.8} toneMapped={false} />
+            <meshStandardMaterial color="#6fd88a" emissive="#6fd88a" emissiveIntensity={0.7} toneMapped={false} />
           </mesh>
         </group>
       );
     default: {
       const hue = rand01(id, 9);
-      const col = hue < 0.4 ? "#a259ff" : hue < 0.7 ? "#35f2ff" : "#ff4fd8";
+      const col = hue < 0.4 ? "#9a7fd0" : hue < 0.7 ? "#4fc3e8" : "#e86a8a";
       return (
         <group>
           <mesh ref={spin} castShadow>
@@ -282,7 +282,7 @@ export function FileMesh({ file, carried }: { file: PlacedFile; carried?: boolea
           {/* pedestal */}
           <mesh castShadow receiveShadow position={[0, 0.2, 0]}>
             <boxGeometry args={[1.3, 0.4, 1.3]} />
-            <meshStandardMaterial color="#1c2033" roughness={0.7} metalness={0.4} />
+            <meshStandardMaterial color="#6f6a5e" roughness={0.8} metalness={0.1} />
           </mesh>
           <mesh position={[0, 0.41, 0]}>
             <boxGeometry args={[1.0, 0.03, 1.0]} />

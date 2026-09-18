@@ -7,31 +7,31 @@ import { Label } from "./Label";
 
 const STYLE = {
   library: {
-    wall: "#7d5b3d",
-    wallAlt: "#6a4a30",
-    trim: "#3a2a24",
-    roof: "#3b2622",
-    window: "#ffc861",
-    accent: "#ffc861",
-    label: "#ffc861",
+    wall: "#c8a06a",
+    wallAlt: "#b8935c",
+    trim: "#6a4a2c",
+    roof: "#8a5a3a",
+    window: "#ffd27a",
+    accent: "#e8b84a",
+    label: "#ffd27a",
   },
   docks: {
-    wall: "#215e6e",
-    wallAlt: "#2b4a5c",
-    trim: "#12222e",
-    roof: "#334b5c",
-    window: "#35f2ff",
-    accent: "#35f2ff",
-    label: "#35f2ff",
+    wall: "#7a8a94",
+    wallAlt: "#6a7a86",
+    trim: "#3a4a52",
+    roof: "#4a5a64",
+    window: "#ffd27a",
+    accent: "#7ec8e8",
+    label: "#7ec8e8",
   },
   desktop: {
-    wall: "#2b2050",
-    wallAlt: "#3a2a6b",
-    trim: "#15112b",
-    roof: "#1b1638",
-    window: "#ff4fd8",
-    accent: "#a259ff",
-    label: "#ff4fd8",
+    wall: "#9a9a9a",
+    wallAlt: "#8a8a8a",
+    trim: "#5a5a5a",
+    roof: "#6a6a6a",
+    window: "#ffd27a",
+    accent: "#e8b84a",
+    label: "#ffd27a",
   },
 } as const;
 
@@ -74,7 +74,7 @@ function Windows({ b, color }: { b: PlacedBuilding; color: string }) {
           const lit = rand01(`${b.entity.id}-win-${i}`, 3);
           if (lit < 0.62) {
             c.set(color).multiplyScalar(1.35 + rand01(`${b.entity.id}-glow-${i}`, 4) * 0.5); // HDR so bloom catches it
-          } else c.set("#0b0d1a");
+          } else c.set("#2a2620");
           m.setColorAt(i, c);
           i++;
         }
@@ -179,22 +179,22 @@ function Building({ b, isDropTarget, highlighted }: { b: PlacedBuilding; isDropT
         <>
           <mesh receiveShadow castShadow position={[0, 0.25, 0]}>
             <boxGeometry args={[w + 1.4, 0.5, d + 1.4]} />
-            <meshStandardMaterial color="#3e4d63" roughness={0.9} />
+            <meshStandardMaterial color="#8a8a8a" roughness={0.9} />
           </mesh>
           <mesh castShadow receiveShadow position={[0, h * 0.65 * 0.5 + 0.5, 0]}>
             <boxGeometry args={[w, h * 0.65, d]} />
-            <meshStandardMaterial color={wallColor} roughness={0.6} metalness={0.35} />
+            <meshStandardMaterial color={wallColor} roughness={0.8} metalness={0.1} />
           </mesh>
           {/* ribs */}
           {[-0.3, 0, 0.3].map((f) => (
             <mesh key={f} castShadow position={[f * w, h * 0.65 * 0.5 + 0.5, 0]}>
               <boxGeometry args={[0.25, h * 0.65 + 0.1, d + 0.2]} />
-              <meshStandardMaterial color={st.trim} roughness={0.6} metalness={0.5} />
+              <meshStandardMaterial color={st.trim} roughness={0.8} metalness={0.2} />
             </mesh>
           ))}
           <mesh castShadow receiveShadow position={[w * 0.1, h * 0.65 + 0.5 + topH / 2, -d * 0.05]}>
             <boxGeometry args={[topW, topH, topD]} />
-            <meshStandardMaterial color={st.wallAlt} roughness={0.6} metalness={0.35} />
+            <meshStandardMaterial color={st.wallAlt} roughness={0.8} metalness={0.1} />
           </mesh>
           {/* neon band */}
           <mesh position={[0, h * 0.65 + 0.5, 0]}>
@@ -209,11 +209,11 @@ function Building({ b, isDropTarget, highlighted }: { b: PlacedBuilding; isDropT
           {/* antenna */}
           <mesh castShadow position={[-w * 0.35, h * 0.65 + 0.5 + topH + 1.8, d * 0.3]}>
             <cylinderGeometry args={[0.08, 0.12, 3.6, 6]} />
-            <meshStandardMaterial color="#8892aa" metalness={0.8} />
+            <meshStandardMaterial color="#6b5a42" roughness={0.8} />
           </mesh>
           <mesh ref={beacon} position={[-w * 0.35, h * 0.65 + 0.5 + topH + 3.7, d * 0.3]}>
             <sphereGeometry args={[0.22, 8, 8]} />
-            <meshStandardMaterial color="#ff4fd8" emissive="#ff4fd8" emissiveIntensity={3} toneMapped={false} />
+            <meshStandardMaterial color="#e8b84a" emissive="#e8b84a" emissiveIntensity={2} toneMapped={false} />
           </mesh>
         </>
       );
@@ -248,7 +248,7 @@ function Building({ b, isDropTarget, highlighted }: { b: PlacedBuilding; isDropT
         </mesh>
         <mesh castShadow position={[0, h + 2.4, 0]}>
           <cylinderGeometry args={[0.06, 0.15, 3, 6]} />
-          <meshStandardMaterial color="#8892aa" metalness={0.8} />
+          <meshStandardMaterial color="#6b5a42" roughness={0.8} />
         </mesh>
         <mesh ref={holo} position={[0, h + 1.6, 0]}>
           <torusGeometry args={[Math.min(w, d) * 0.45, 0.07, 8, 40]} />
@@ -296,7 +296,7 @@ function Building({ b, isDropTarget, highlighted }: { b: PlacedBuilding; isDropT
       {highlighted && (
         <mesh position={[0, h / 2 + 0.3, 0]}>
           <boxGeometry args={[w + 0.7, h + 0.7, d + 0.7]} />
-          <meshBasicMaterial color="#35f2ff" wireframe transparent opacity={0.4} depthWrite={false} />
+          <meshBasicMaterial color="#ffe08a" wireframe transparent opacity={0.4} depthWrite={false} />
         </mesh>
       )}
       <Label

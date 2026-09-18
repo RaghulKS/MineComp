@@ -7,9 +7,9 @@ import { REACTOR_POS } from "../worldgen";
 import { Label } from "./Label";
 
 const BARS = 10;
-const COOL = new THREE.Color("#35f2ff");
+const COOL = new THREE.Color("#7ec8e8");
 const WARM = new THREE.Color("#ffb347");
-const HOT = new THREE.Color("#ff4f6a");
+const HOT = new THREE.Color("#e85a3a");
 
 export default function Reactor({ targeted }: { targeted: boolean }) {
   const core = useRef<THREE.Mesh>(null);
@@ -85,15 +85,15 @@ export default function Reactor({ targeted }: { targeted: boolean }) {
       {/* base */}
       <mesh receiveShadow castShadow position={[0, 0.4, 0]}>
         <cylinderGeometry args={[9, 9.6, 0.8, 12]} />
-        <meshStandardMaterial color="#1c2033" roughness={0.6} metalness={0.5} />
+        <meshStandardMaterial color="#6f6a5e" roughness={0.8} metalness={0.15} />
       </mesh>
       <mesh receiveShadow castShadow position={[0, 1.2, 0]}>
         <cylinderGeometry args={[4.2, 4.8, 0.8, 12]} />
-        <meshStandardMaterial color="#232849" roughness={0.6} metalness={0.5} />
+        <meshStandardMaterial color="#7d7668" roughness={0.8} metalness={0.15} />
       </mesh>
       <mesh position={[0, 0.82, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[8.6, 8.9, 64]} />
-        <meshStandardMaterial color="#a259ff" emissive="#a259ff" emissiveIntensity={2} toneMapped={false} side={THREE.DoubleSide} />
+        <meshStandardMaterial color="#e8b84a" emissive="#e8b84a" emissiveIntensity={1.4} toneMapped={false} side={THREE.DoubleSide} />
       </mesh>
       {/* pylons */}
       {[0, 1, 2, 3].map((i) => {
@@ -102,11 +102,11 @@ export default function Reactor({ targeted }: { targeted: boolean }) {
           <group key={i} position={[Math.cos(a) * 3.6, 0, Math.sin(a) * 3.6]}>
             <mesh castShadow position={[0, 11, 0]}>
               <boxGeometry args={[0.9, 22, 0.9]} />
-              <meshStandardMaterial color="#1b1f3a" roughness={0.4} metalness={0.7} />
+              <meshStandardMaterial color="#5c574c" roughness={0.7} metalness={0.3} />
             </mesh>
             <mesh position={[0, 11, 0]}>
               <boxGeometry args={[0.2, 21, 1.0]} />
-              <meshStandardMaterial color="#35f2ff" emissive="#35f2ff" emissiveIntensity={1.4} toneMapped={false} />
+              <meshStandardMaterial color="#ffb347" emissive="#ffb347" emissiveIntensity={1.2} toneMapped={false} />
             </mesh>
           </group>
         );
@@ -114,34 +114,34 @@ export default function Reactor({ targeted }: { targeted: boolean }) {
       {/* crown */}
       <mesh castShadow position={[0, 22.4, 0]}>
         <cylinderGeometry args={[5.4, 5.4, 0.8, 8]} />
-        <meshStandardMaterial color="#1c2033" roughness={0.5} metalness={0.6} />
+        <meshStandardMaterial color="#6f6a5e" roughness={0.7} metalness={0.3} />
       </mesh>
       <mesh position={[0, 24.5, 0]}>
         <cylinderGeometry args={[0.15, 0.6, 4, 6]} />
-        <meshStandardMaterial color="#8892aa" metalness={0.8} />
+        <meshStandardMaterial color="#6b5a42" roughness={0.8} />
       </mesh>
       <mesh position={[0, 26.8, 0]}>
         <octahedronGeometry args={[0.9, 0]} />
-        <meshStandardMaterial color="#ff4fd8" emissive="#ff4fd8" emissiveIntensity={3} toneMapped={false} />
+        <meshStandardMaterial color="#ffb347" emissive="#ffb347" emissiveIntensity={2.2} toneMapped={false} />
       </mesh>
       {/* core */}
       <mesh ref={core} position={[0, 8, 0]}>
         <cylinderGeometry args={[1.5, 1.5, 8, 6, 1]} />
-        <meshStandardMaterial ref={coreMat} color="#35f2ff" emissive="#35f2ff" emissiveIntensity={2} roughness={0.2} toneMapped={false} />
+        <meshStandardMaterial ref={coreMat} color="#7ec8e8" emissive="#7ec8e8" emissiveIntensity={2} roughness={0.2} toneMapped={false} />
       </mesh>
       <mesh ref={ring1} position={[0, 8, 0]}>
         <torusGeometry args={[2.6, 0.12, 8, 48]} />
-        <meshStandardMaterial color="#35f2ff" emissive="#35f2ff" emissiveIntensity={2.4} toneMapped={false} />
+        <meshStandardMaterial color="#7ec8e8" emissive="#7ec8e8" emissiveIntensity={2} toneMapped={false} />
       </mesh>
       <mesh ref={ring2} position={[0, 8, 0]}>
         <torusGeometry args={[3.1, 0.1, 8, 48]} />
-        <meshStandardMaterial color="#a259ff" emissive="#a259ff" emissiveIntensity={2.4} toneMapped={false} />
+        <meshStandardMaterial color="#ffb347" emissive="#ffb347" emissiveIntensity={2} toneMapped={false} />
       </mesh>
       <mesh ref={ring3} position={[0, 8, 0]}>
         <torusGeometry args={[2.1, 0.08, 8, 48]} />
-        <meshStandardMaterial color="#ff4fd8" emissive="#ff4fd8" emissiveIntensity={2.4} toneMapped={false} />
+        <meshStandardMaterial color="#e85a3a" emissive="#e85a3a" emissiveIntensity={2} toneMapped={false} />
       </mesh>
-      <pointLight ref={light} position={[0, 8, 0]} color="#35f2ff" intensity={100} distance={60} decay={2} />
+      <pointLight ref={light} position={[0, 8, 0]} color="#7ec8e8" intensity={100} distance={60} decay={2} />
       {/* RAM energy bars */}
       {Array.from({ length: BARS }).map((_, i) => {
         const a = (i / BARS) * Math.PI * 2;
@@ -150,7 +150,7 @@ export default function Reactor({ targeted }: { targeted: boolean }) {
           <group key={i} position={[Math.cos(a) * r, 0, Math.sin(a) * r]} rotation={[0, -a, 0]}>
             <mesh castShadow position={[0, 0.9, 0]}>
               <boxGeometry args={[1.1, 0.3, 1.1]} />
-              <meshStandardMaterial color="#232849" metalness={0.5} />
+              <meshStandardMaterial color="#7d7668" roughness={0.8} metalness={0.2} />
             </mesh>
             <mesh
               ref={(m) => {
@@ -163,8 +163,8 @@ export default function Reactor({ targeted }: { targeted: boolean }) {
                 ref={(m) => {
                   barMats.current[i] = m;
                 }}
-                color="#a259ff"
-                emissive="#a259ff"
+                color="#ffb347"
+                emissive="#ffb347"
                 emissiveIntensity={1.5}
                 toneMapped={false}
                 transparent
@@ -174,8 +174,8 @@ export default function Reactor({ targeted }: { targeted: boolean }) {
           </group>
         );
       })}
-      <Sparkles count={120} scale={[10, 20, 10]} position={[0, 12, 0]} size={5} speed={2} color="#c9a3ff" opacity={0.8} />
-      <Label text="SYSTEM REACTOR" sub="LIVE CPU • RAM TELEMETRY" position={[0, 30, 0]} color="#a259ff" scale={3.2} />
+      <Sparkles count={120} scale={[10, 20, 10]} position={[0, 12, 0]} size={5} speed={2} color="#ffd27a" opacity={0.8} />
+      <Label text="SYSTEM REACTOR" sub="LIVE CPU • RAM TELEMETRY" position={[0, 30, 0]} color="#ffb347" scale={3.2} />
       {targeted && (
         <mesh position={[0, 8, 0]}>
           <cylinderGeometry args={[4.4, 4.4, 14, 6, 1, true]} />

@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Sparkles, Stars } from "@react-three/drei";
+import { Sparkles } from "@react-three/drei";
 import { buildDecorations, DISTRICTS, rand01, ROADS, WORLD_RADIUS } from "../worldgen";
 import type { Collider } from "../types";
 import { Label } from "./Label";
@@ -41,13 +41,13 @@ function blockTexture(
 
 export function useGrassTexture() {
   return useMemo(
-    () => blockTexture(64, ["#1c4a2c", "#245c38", "#173d25", "#2d7048", "#1e5030", "#286440", "#33804f", "#204f31"], "grass", 90),
+    () => blockTexture(64, ["#5d9c3f", "#6ab04c", "#4e8a34", "#7ab648", "#5f9e41", "#6aa84f", "#548c38", "#71b04a"], "grass", 90),
     [],
   );
 }
 
 export function useStoneTexture() {
-  return useMemo(() => blockTexture(32, ["#2a2f45", "#252a3e", "#30364f", "#1f2337", "#2c3149"], "stone", 6), []);
+  return useMemo(() => blockTexture(32, ["#7d7d7d", "#8a8a8a", "#6f6f6f", "#828282", "#767676"], "stone", 6), []);
 }
 
 // ---------- sky ----------
@@ -72,11 +72,11 @@ const skyFragment = /* glsl */ `
   void main() {
     vec3 dir = normalize(vWorld - cameraPosition);
     float h = dir.y;
-    vec3 top = vec3(0.016, 0.02, 0.075);
-    vec3 upper = vec3(0.10, 0.05, 0.26);
-    vec3 horizon = vec3(0.42, 0.16, 0.48);
-    vec3 glow = vec3(0.95, 0.30, 0.80);
-    vec3 below = vec3(0.05, 0.06, 0.12);
+    vec3 top = vec3(0.22, 0.46, 0.86);
+    vec3 upper = vec3(0.42, 0.64, 0.95);
+    vec3 horizon = vec3(0.78, 0.87, 0.97);
+    vec3 glow = vec3(1.0, 0.92, 0.72);
+    vec3 below = vec3(0.55, 0.62, 0.68);
     vec3 col;
     if (h > 0.0) {
       col = mix(horizon, upper, smoothstep(0.0, 0.22, h));
@@ -85,11 +85,11 @@ const skyFragment = /* glsl */ `
       col = mix(horizon, below, smoothstep(0.0, 0.25, -h));
     }
     float band = pow(1.0 - clamp(abs(h), 0.0, 1.0), 14.0);
-    col += glow * band * 0.55;
-    // cyan aurora ribbon
-    float ribbon = exp(-pow((h - 0.32 + 0.05 * sin(dir.x * 3.0 + uTime * 0.15)) * 9.0, 2.0));
-    ribbon *= 0.5 + 0.5 * sin(dir.x * 6.0 + dir.z * 4.0 + uTime * 0.25);
-    col += vec3(0.15, 0.7, 0.9) * ribbon * 0.22;
+    col += glow * band * 0.35;
+    // soft drifting cloud band
+    float ribbon = exp(-pow((h - 0.32 + 0.05 * sin(dir.x * 3.0 + uTime * 0.05)) * 9.0, 2.0));
+    ribbon *= 0.5 + 0.5 * sin(dir.x * 6.0 + dir.z * 4.0 + uTime * 0.08);
+    col += vec3(1.0, 1.0, 1.0) * ribbon * 0.12;
     gl_FragColor = vec4(col, 1.0);
   }
 `;
@@ -141,8 +141,8 @@ function SunLight() {
     <directionalLight
       ref={light}
       castShadow
-      intensity={2.2}
-      color="#ffd6ad"
+      intensity={2.6}
+      color="#fff3dc"
       shadow-mapSize={[2048, 2048]}
       shadow-camera-left={-70}
       shadow-camera-right={70}
@@ -172,13 +172,13 @@ function Roads({ stone }: { stone: THREE.Texture }) {
           <group key={i} position={[cx, 0, cz]} rotation={[0, rot, 0]}>
             <mesh receiveShadow position={[0, 0.06, 0]}>
               <boxGeometry args={[r.width, 0.12, len]} />
-              <meshStandardMaterial map={stone} color="#8f95b8" roughness={0.9} />
+              <meshStandardMaterial map={stone} color="#b8b4a8" roughness={0.9} />
             </mesh>
-            {/* neon edge strips */}
+            {/* warm gravel edge strips */}
             {[-1, 1].map((s) => (
               <mesh key={s} position={[(s * (r.width + 0.16)) / 2, 0.1, 0]}>
                 <boxGeometry args={[0.16, 0.06, len]} />
-                <meshStandardMaterial color="#35f2ff" emissive="#35f2ff" emissiveIntensity={1.4} toneMapped={false} />
+                <meshStandardMaterial color="#8a7a5c" roughness={0.95} />
               </mesh>
             ))}
           </group>
@@ -205,25 +205,25 @@ function Plaza({ stone }: { stone: THREE.Texture }) {
     <group>
       <mesh receiveShadow position={[0, 0.05, 0]}>
         <cylinderGeometry args={[22, 22, 0.1, 48]} />
-        <meshStandardMaterial map={stone} color="#a4a9cf" roughness={0.85} />
+        <meshStandardMaterial map={stone} color="#c4b89e" roughness={0.85} />
       </mesh>
-      {/* neon ring inlay */}
+      {/* gold ring inlay */}
       <mesh position={[0, 0.12, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[19.4, 19.9, 96]} />
-        <meshStandardMaterial color="#35f2ff" emissive="#35f2ff" emissiveIntensity={1.8} toneMapped={false} side={THREE.DoubleSide} />
+        <meshStandardMaterial color="#e8b84a" emissive="#e8b84a" emissiveIntensity={0.9} toneMapped={false} side={THREE.DoubleSide} />
       </mesh>
       <mesh position={[0, 0.12, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[5.6, 5.9, 64]} />
-        <meshStandardMaterial color="#ff4fd8" emissive="#ff4fd8" emissiveIntensity={1.6} toneMapped={false} side={THREE.DoubleSide} />
+        <meshStandardMaterial color="#e8b84a" emissive="#e8b84a" emissiveIntensity={0.8} toneMapped={false} side={THREE.DoubleSide} />
       </mesh>
       {/* central monument */}
       <mesh castShadow receiveShadow position={[0, 0.9, 0]}>
         <cylinderGeometry args={[2.6, 3.2, 1.8, 8]} />
-        <meshStandardMaterial color="#2a2f4a" roughness={0.6} metalness={0.3} />
+        <meshStandardMaterial color="#6f6a5e" roughness={0.7} metalness={0.15} />
       </mesh>
       <mesh castShadow position={[0, 2.6, 0]}>
         <cylinderGeometry args={[0.5, 1.4, 1.8, 6]} />
-        <meshStandardMaterial color="#1c2038" roughness={0.5} metalness={0.5} />
+        <meshStandardMaterial color="#5c574c" roughness={0.6} metalness={0.25} />
       </mesh>
       <mesh ref={crystal} castShadow position={[0, 7, 0]}>
         <octahedronGeometry args={[1.8, 0]} />
@@ -274,50 +274,50 @@ function DistrictFloors({ stone }: { stone: THREE.Texture }) {
       <group position={[dl[0], 0, dl[2]]}>
         <mesh receiveShadow position={[0, -0.25, 0]}>
           <boxGeometry args={[78, 0.3, 66]} />
-          <meshStandardMaterial ref={water} color="#0b2a40" emissive="#0c4d6e" emissiveIntensity={0.4} roughness={0.15} metalness={0.6} transparent opacity={0.92} />
+          <meshStandardMaterial ref={water} color="#2f6db3" emissive="#1a4a80" emissiveIntensity={0.25} roughness={0.2} metalness={0.3} transparent opacity={0.92} />
         </mesh>
         <mesh receiveShadow position={[0, 0.05, 0]}>
           <boxGeometry args={[52, 0.14, 44]} />
-          <meshStandardMaterial color="#3e4d63" roughness={0.9} />
+          <meshStandardMaterial color="#8a6a44" roughness={0.9} />
         </mesh>
-        {/* dock edge lights */}
+        {/* dock edge trim */}
         {[-1, 1].map((s) => (
           <mesh key={s} position={[s * 26, 0.14, 0]}>
             <boxGeometry args={[0.2, 0.08, 44]} />
-            <meshStandardMaterial color="#35f2ff" emissive="#35f2ff" emissiveIntensity={1.6} toneMapped={false} />
+            <meshStandardMaterial color="#6b4f30" roughness={0.9} />
           </mesh>
         ))}
         {[-1, 1].map((s) => (
           <mesh key={`z${s}`} position={[0, 0.14, s * 22]}>
             <boxGeometry args={[52, 0.08, 0.2]} />
-            <meshStandardMaterial color="#35f2ff" emissive="#35f2ff" emissiveIntensity={1.6} toneMapped={false} />
+            <meshStandardMaterial color="#6b4f30" roughness={0.9} />
           </mesh>
         ))}
         {/* crane */}
         <group position={[0, 0, -16]}>
           <mesh castShadow position={[0, 9, 0]}>
             <boxGeometry args={[1.2, 18, 1.2]} />
-            <meshStandardMaterial color="#3a4a5a" metalness={0.6} roughness={0.5} />
+            <meshStandardMaterial color="#7a6248" roughness={0.8} />
           </mesh>
           <mesh castShadow position={[6, 17.5, 0]}>
             <boxGeometry args={[14, 0.8, 0.8]} />
-            <meshStandardMaterial color="#3a4a5a" metalness={0.6} roughness={0.5} />
+            <meshStandardMaterial color="#7a6248" roughness={0.8} />
           </mesh>
           <mesh position={[12.5, 17.5, 0]}>
             <boxGeometry args={[0.5, 0.5, 0.5]} />
-            <meshStandardMaterial color="#ff4fd8" emissive="#ff4fd8" emissiveIntensity={3} toneMapped={false} />
+            <meshStandardMaterial color="#e8b84a" emissive="#e8b84a" emissiveIntensity={1.6} toneMapped={false} />
           </mesh>
           <mesh position={[10, 14, 0]}>
             <boxGeometry args={[0.08, 7, 0.08]} />
-            <meshStandardMaterial color="#8892aa" />
+            <meshStandardMaterial color="#4a3a28" />
           </mesh>
           <mesh castShadow position={[10, 9.6, 0]}>
             <boxGeometry args={[2.2, 1.6, 1.4]} />
-            <meshStandardMaterial color="#1f6f7a" roughness={0.7} />
+            <meshStandardMaterial color="#9a5a3a" roughness={0.8} />
           </mesh>
         </group>
-        <pointLight position={[0, 8, 0]} color="#35f2ff" intensity={30} distance={45} decay={2} />
-        <Label text="DOWNLOADS DOCKS" sub="INBOUND CARGO" position={[0, 11, 0]} color="#35f2ff" scale={3} />
+        <pointLight position={[0, 8, 0]} color="#ffd27a" intensity={30} distance={45} decay={2} />
+        <Label text="DOWNLOADS DOCKS" sub="INBOUND CARGO" position={[0, 11, 0]} color="#ffd27a" scale={3} />
       </group>
     </group>
   );
@@ -359,13 +359,13 @@ function Decorations({ colliders }: { colliders: Collider[] }) {
       m.compose(p, q, s);
       canopyRef.current?.setMatrixAt(i, m);
       const shade = rand01(`c${t.seed}`, 2);
-      c.setHSL(0.36 + shade * 0.1, 0.55, 0.22 + shade * 0.12);
+      c.setHSL(0.29 + shade * 0.06, 0.62, 0.3 + shade * 0.1);
       canopyRef.current?.setColorAt(i, c);
       p.set(t.position[0], h + 3.4 * t.scale, t.position[2]);
       s.set(2.2 * t.scale, 1.8 * t.scale, 2.2 * t.scale);
       m.compose(p, q, s);
       canopy2Ref.current?.setMatrixAt(i, m);
-      c.setHSL(0.38 + shade * 0.1, 0.6, 0.28 + shade * 0.12);
+      c.setHSL(0.31 + shade * 0.06, 0.66, 0.36 + shade * 0.1);
       canopy2Ref.current?.setColorAt(i, c);
     });
     crystals.forEach((t, i) => {
@@ -375,7 +375,7 @@ function Decorations({ colliders }: { colliders: Collider[] }) {
       m.compose(p, q, s);
       crystalRef.current?.setMatrixAt(i, m);
       const hue = rand01(`ch${t.seed}`, 3);
-      c.set(hue < 0.5 ? "#35f2ff" : hue < 0.8 ? "#a259ff" : "#ff4fd8");
+      c.set(hue < 0.5 ? "#7ee8d8" : hue < 0.8 ? "#8fd8ff" : "#c8a2f0");
       crystalRef.current?.setColorAt(i, c);
     });
     rocks.forEach((t, i) => {
@@ -409,31 +409,31 @@ function Decorations({ colliders }: { colliders: Collider[] }) {
     <group>
       <instancedMesh ref={trunkRef} args={[undefined, undefined, Math.max(1, trees.length)]} castShadow receiveShadow>
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="#4a3222" roughness={0.9} />
+        <meshStandardMaterial color="#6a4a2c" roughness={0.95} />
       </instancedMesh>
       <instancedMesh ref={canopyRef} args={[undefined, undefined, Math.max(1, trees.length)]} castShadow receiveShadow>
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="#2f7a45" roughness={0.9} />
+        <meshStandardMaterial color="#3f8f35" roughness={0.9} />
       </instancedMesh>
       <instancedMesh ref={canopy2Ref} args={[undefined, undefined, Math.max(1, trees.length)]} castShadow>
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="#3a8f52" roughness={0.9} />
+        <meshStandardMaterial color="#4da33e" roughness={0.9} />
       </instancedMesh>
       <instancedMesh ref={crystalRef} args={[undefined, undefined, Math.max(1, crystals.length)]} castShadow>
         <octahedronGeometry args={[1, 0]} />
-        <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={1.2} roughness={0.2} toneMapped={false} />
+        <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.7} roughness={0.2} toneMapped={false} />
       </instancedMesh>
       <instancedMesh ref={rockRef} args={[undefined, undefined, Math.max(1, rocks.length)]} castShadow receiveShadow>
         <dodecahedronGeometry args={[1, 0]} />
-        <meshStandardMaterial color="#4b5068" roughness={0.95} />
+        <meshStandardMaterial color="#8a8a8a" roughness={0.95} />
       </instancedMesh>
       <instancedMesh ref={lampPostRef} args={[undefined, undefined, Math.max(1, lamps.length)]} castShadow>
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="#1c2033" metalness={0.6} roughness={0.4} />
+        <meshStandardMaterial color="#4a3a28" roughness={0.8} />
       </instancedMesh>
       <instancedMesh ref={lampHeadRef} args={[undefined, undefined, Math.max(1, lamps.length)]}>
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="#ffe9b0" emissive="#ffd27a" emissiveIntensity={2.6} toneMapped={false} />
+        <meshStandardMaterial color="#ffe9b0" emissive="#ffd27a" emissiveIntensity={2.2} toneMapped={false} />
       </instancedMesh>
     </group>
   );
@@ -445,7 +445,7 @@ function Boundary() {
   return (
     <mesh position={[0, 6, 0]}>
       <cylinderGeometry args={[WORLD_RADIUS, WORLD_RADIUS, 12, 96, 1, true]} />
-      <meshBasicMaterial color="#35f2ff" transparent opacity={0.05} side={THREE.DoubleSide} depthWrite={false} />
+      <meshBasicMaterial color="#ffd27a" transparent opacity={0.04} side={THREE.DoubleSide} depthWrite={false} />
     </mesh>
   );
 }
@@ -455,24 +455,23 @@ export default function Environment({ colliders }: { colliders: Collider[] }) {
   const stone = useStoneTexture();
   return (
     <group>
-      <color attach="background" args={["#120d26"]} />
-      <fogExp2 attach="fog" args={["#1a1238", 0.0058]} />
+      <color attach="background" args={["#79a6e8"]} />
+      <fogExp2 attach="fog" args={["#a8c4e8", 0.0042]} />
       <Sky />
-      <Stars radius={380} depth={40} count={2200} factor={5} saturation={0.4} fade speed={0.4} />
-      <ambientLight intensity={0.42} color="#8f9dff" />
-      <hemisphereLight args={["#6f7cff", "#1a2a1a", 0.55]} />
+      <ambientLight intensity={0.55} color="#cfe4ff" />
+      <hemisphereLight args={["#87b8e8", "#5d8a3c", 0.7]} />
       <SunLight />
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <circleGeometry args={[WORLD_RADIUS + 30, 96]} />
-        <meshStandardMaterial map={grass} color="#8fbf8f" roughness={1} />
+        <meshStandardMaterial map={grass} color="#a8d97c" roughness={1} />
       </mesh>
       <Roads stone={stone} />
       <Plaza stone={stone} />
       <DistrictFloors stone={stone} />
       <Decorations colliders={colliders} />
       <Boundary />
-      <Sparkles count={700} scale={[300, 40, 300]} position={[0, 14, -20]} size={4} speed={0.25} opacity={0.55} color="#9fd8ff" noise={1} />
-      <Sparkles count={200} scale={[60, 12, 60]} position={[0, 5, 0]} size={6} speed={0.4} opacity={0.7} color="#ffc861" noise={2} />
+      <Sparkles count={400} scale={[300, 40, 300]} position={[0, 14, -20]} size={4} speed={0.25} opacity={0.4} color="#fff3b0" noise={1} />
+      <Sparkles count={200} scale={[60, 12, 60]} position={[0, 5, 0]} size={6} speed={0.4} opacity={0.6} color="#ffd27a" noise={2} />
     </group>
   );
 }
