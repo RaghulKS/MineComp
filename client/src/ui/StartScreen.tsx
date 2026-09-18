@@ -29,7 +29,7 @@ export default function StartScreen() {
     return (
       <div className="start fade-in" onClick={enterWorld}>
         <div className="start-inner">
-          <div className="start-title">WORLDOS</div>
+          <div className="start-title">MINECOMP</div>
           <div className="start-tagline">Your computer is now a world.</div>
           <button className="enter-btn" onClick={onButtonClick}>
             [ ENTER WORLD ]
@@ -53,7 +53,7 @@ export default function StartScreen() {
   return (
     <div className="start paused fade-in" onClick={resume}>
       <div className="start-inner">
-        <div className="start-title">WORLDOS</div>
+        <div className="start-title">MINECOMP</div>
         <button className="enter-btn" onClick={onResumeClick}>
           [ RESUME ]
         </button>

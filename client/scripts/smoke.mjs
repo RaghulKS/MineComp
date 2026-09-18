@@ -98,7 +98,9 @@ await wait(1500);
 const target = await page.evaluate(() => window.__worldos.store.getState().target);
 console.log("TARGET", JSON.stringify(target));
 await snap("08-aim-file");
-if (target && target.kind === "file") {
+const liveMoveOk = world.source !== "live" || process.env.LIVE_MOVE === "1";
+if (!liveMoveOk) console.log("SKIP carry/drop: live filesystem (set LIVE_MOVE=1 to move a real file)");
+if (target && target.kind === "file" && liveMoveOk) {
   await page.keyboard.press("KeyF");
   await wait(900);
   const carrying = await page.evaluate(() => window.__worldos.store.getState().carrying?.name);

@@ -301,7 +301,7 @@ function demo(
 export const FALLBACK_WORLD: WorldEntity[] = [
   // Desktop
   demo("Desktop", "Projects", "folder", 0.2),
-  demo("Desktop", "Projects\\worldos-client.ts", "file", 0.1, 48213),
+  demo("Desktop", "Projects\\minecomp-client.ts", "file", 0.1, 48213),
   demo("Desktop", "Projects\\server.js", "file", 0.3, 22011),
   demo("Desktop", "Projects\\pipeline.py", "file", 1.2, 9800),
   demo("Desktop", "Projects\\README.md", "file", 2, 4021),

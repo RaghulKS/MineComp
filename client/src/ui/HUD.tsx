@@ -69,7 +69,7 @@ export default function HUD() {
   return (
     <div className="hud">
       <div className="brand">
-        <div className="brand-title">WORLDOS</div>
+        <div className="brand-title">MINECOMP</div>
         <div className="brand-sub">LIVE PC // PLAYABLE</div>
       </div>
 

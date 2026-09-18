@@ -19,11 +19,11 @@ async function main() {
   const index = new WorldIndex(roots);
   const monitor = new SystemMonitor();
 
-  console.log(`[worldos] platform=${isWindows ? "windows" : isWSL ? "wsl" : process.platform} profile=${userProfile}`);
-  for (const n of ROOT_NAMES) console.log(`[worldos] root ${n} -> ${roots[n]} ${fs.existsSync(roots[n]) ? "" : "(MISSING)"}`);
+  console.log(`[minecomp] platform=${isWindows ? "windows" : isWSL ? "wsl" : process.platform} profile=${userProfile}`);
+  for (const n of ROOT_NAMES) console.log(`[minecomp] root ${n} -> ${roots[n]} ${fs.existsSync(roots[n]) ? "" : "(MISSING)"}`);
 
   await index.rescan();
-  console.log(`[worldos] indexed ${index.count} entities in ${index.lastScanMs}ms`);
+  console.log(`[minecomp] indexed ${index.count} entities in ${index.lastScanMs}ms`);
 
   const app = express();
   app.use(cors({ origin: [/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/] }));
@@ -114,7 +114,7 @@ async function main() {
     if (err instanceof PathError) return fail(res, err.status, err.message);
     const msg = err instanceof Error ? err.message : String(err);
     if (/JSON/i.test(msg)) return fail(res, 400, "invalid JSON body");
-    console.error("[worldos] error:", msg);
+    console.error("[minecomp] error:", msg);
     fail(res, 500, msg);
   });
 
@@ -157,9 +157,9 @@ async function main() {
     if (ev === "change") return; // content edits don't reshape the world; add/unlink/addDir/unlinkDir do
     scheduleRescan();
   });
-  watcher.on("error", (e) => console.warn("[watch] error:", (e as Error).message));
+  watcher.on("error", (e) => console.warn("[minecomp:watch] error:", (e as Error).message));
 
-  server.listen(PORT, () => console.log(`[worldos] http://localhost:${PORT}  ws://localhost:${PORT}/ws`));
+  server.listen(PORT, () => console.log(`[minecomp] http://localhost:${PORT}  ws://localhost:${PORT}/ws`));
 
   const shutdown = () => {
     monitor.stop();
@@ -172,6 +172,6 @@ async function main() {
 }
 
 main().catch((e) => {
-  console.error("[worldos] fatal:", e);
+  console.error("[minecomp] fatal:", e);
   process.exit(1);
 });

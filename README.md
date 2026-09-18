@@ -1,4 +1,4 @@
-# WorldOS
+# MineComp
 
 Your computer is now a world. `client/` = React + Three.js game (Builder A). `server/` = local Windows bridge (Builder B).
 
